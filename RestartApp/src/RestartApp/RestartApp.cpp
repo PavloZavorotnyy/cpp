@@ -30,10 +30,18 @@ typedef struct _FINDWINDOWHANDLESTRUCT
     HWND hWndFound;
 }FINDWINDOWHANDLESTRUCT;
 
+const string WHITESPACE = " \"\n\r\t\f\v\\";
+
 // token handle
 // Privilege to enable/disable
 // TRUE to enable.  FALSE to disable
 BOOL SetPrivilege( HANDLE hToken, LPCTSTR Privilege, BOOL bEnablePrivilege );
+
+static void out_help_short_string()
+{
+	setlocale(LC_ALL, "Russian");
+	cout << "RestartApp.exe -n <EXE file name> -m <Windows message> -p <Path EXE file> -r<restart> -a <parameters>" << endl;
+}
 
 static void out_help_string()
 {
@@ -447,11 +455,11 @@ int main(int argc, char* argv[])
     bool restart_program;
     bool silence_console;
     bool list_process;
-    string module_name;
-    string window_message;
-    string module_location;
-    string location;
-    string module_arg;
+    string module_name = "";
+    string window_message = "";
+    string module_location = "";
+    string location = "";
+    string module_arg = "";
     DWORD msg;
     HWND hwnd;
 
@@ -480,6 +488,13 @@ int main(int argc, char* argv[])
         {"arg",      required_argument, 0, 'a'},
         {0,                          0, 0,  0 }
     };
+
+	if(argc == 1)
+	{
+		out_help_short_string();
+		return 0;
+	}
+
     /* getopt_long stores the option index here. */
     int option_index = 0;
 
@@ -497,7 +512,11 @@ int main(int argc, char* argv[])
                 window_message = optarg;
                 break;
             case 'p':
-                module_location = optarg;
+				size_t end_c;
+				module_location = optarg;
+				// trim WHITESPACE symbols
+				end_c = module_location.find_last_not_of(WHITESPACE);
+				module_location = (end_c == string::npos) ? "" : module_location.substr(0, end_c + 1);
                 break;
             case 's':
                 silence_console = true;

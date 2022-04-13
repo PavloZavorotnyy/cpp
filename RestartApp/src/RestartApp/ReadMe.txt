@@ -1,33 +1,25 @@
-========================================================================
-    CONSOLE APPLICATION : RestartApp Project Overview
-========================================================================
-
-AppWizard has created this RestartApp application for you.  
-
-This file contains a summary of what you will find in each of the files that
-make up your RestartApp application.
-
-
-RestartApp.vcproj
-    This is the main project file for VC++ projects generated using an Application Wizard. 
-    It contains information about the version of Visual C++ that generated the file, and 
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-RestartApp.cpp
-    This is the main application source file.
-
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
-
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named RestartApp.pch and a precompiled types file named StdAfx.obj.
-
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
-/////////////////////////////////////////////////////////////////////////////
+Программа для выгрузки/перезапуска исполняемого модуля(программы), необходимы права администратора.
+RestartApp.exe -n <программа> -m <сообщение Windows> -p <путь> -r<если перезапуск> -a <параметры>
+Пример запуска:
+перезапуск приложения myApp.exe из папки C:\MyFolder с параметрами командной строки myAppParams.
+RestartApp.exe -n myApp.exe -m 16 -l C:\MyFolder -r -a myAppParams
+ -n : имя исполняемой программы для выгрузки/перезапуска, необходимый параметр.
+ -m : сообщение посылаемое окну программы myApp.exe, если оно есть, например 16 для WM_CLOSE.
+ -p : путь исполняемой программы myApp.exe, если путь не совпадает с указанным
+      после параметра -l программа не закрывается и не перезапускается.
+      Если параметр не задан, проверка пути не производится выгружается/перезапускается
+      первое найденное в списке приложение.
+ -r : ключ указывает на необходимость перезапустить программу, после выгрузки.
+ -a : параметры с которыми производится перезапуск программы myApp.exe.
+ -s : не выводить на консоль сообщения программы.
+ -f : вывод списка процессов, остальные параметры игнорируются.
+Пример запуска:
+выгрузка службы ss_conn_service.exe, для служб некорректно, правильно использовать команду:
+net stop <имя службы>
+в данном случае:
+net stop \"SAMSUNG Mobile Connectivity Service\"
+RestartApp.exe -p ss_conn_service.exe
+Пример запуска:
+вывод списка процессов в системе
+RestartApp.exe -l
+RestartApp.exe --list
